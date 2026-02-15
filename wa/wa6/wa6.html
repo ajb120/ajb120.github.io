@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Template</title>
+
+    <style>
+        /* CSS Reset and Base Styles */
+        :root {
+            /* Apple-Clean Neutral Palette */
+            --color-primary: #1d1d1f;     /* Main text / strong contrast */
+            --color-secondary: #6e6e73;   /* Muted text */
+            --color-accent: #0071e3;      /* Apple-style blue accent */
+            --color-neutral: #ffffff;     /* White */
+            --color-background: #f5f5f7;  /* Apple page gray */
+
+            --color-text-dark: #1d1d1f;
+            --color-text-light: #ffffff;
+
+            /* Typography */
+            --font-primary: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-secondary: 'Roboto Mono', monospace;
+
+            /* Spacing System */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            background-color: var(--color-background);
+            color: var(--color-text-dark);
+            padding: var(--spacing-xl);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Typography Styles */
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-primary);
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-primary);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-secondary);
+        }
+
+        .body-text {
+            font-size: 1rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .small-text {
+            font-size: 0.75rem;
+            color: var(--color-secondary);
+        }
+
+        /* Color Palette Section */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .color-swatch {
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid #d2d2d7; /* subtle Apple divider */
+            background-color: var(--color-neutral);
+        }
+
+        /* Component Styles */
+        .button {
+            display: inline-block;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background-color: var(--color-accent);
+            color: var(--color-text-light);
+            text-decoration: none;
+            border-radius: 999px; /* Apple pill */
+            transition: opacity 0.25s ease;
+            border: none;
+        }
+
+        .button:hover {
+            opacity: 0.85;
+        }
+
+        .button:active {
+            opacity: 0.7;
+        }
+
+        .link {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .link:visited {
+            color: var(--color-secondary);
+        }
+
+        /* Spacing Demonstration */
+        .spacing-demo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .spacing-block {
+            background-color: var(--color-accent);
+            height: 50px;
+            border-radius: var(--radius-sm);
+        }
+    </style>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Design System Template</h1>
+
+        <section>
+            <h2>Color Palette</h2>
+            <div class="color-palette">
+                <div class="color-swatch" style="background-color: var(--color-primary); color: white;">
+                    <strong>Primary Color</strong>
+                    <p>#1D1D1F</p>
+                    <small>Contrast Ratio: 17.0:1</small>
+                </div>
+
+                <div class="color-swatch" style="background-color: var(--color-secondary); color: white;">
+                    <strong>Secondary Color</strong>
+                    <p>#6E6E73</p>
+                    <small>Contrast Ratio: 4.6:1</small>
+                </div>
+
+                <div class="color-swatch" style="background-color: var(--color-accent); color: white;">
+                    <strong>Accent Color</strong>
+                    <p>#0071E3</p>
+                    <small>Contrast Ratio: 8.6:1</small>
+                </div>
+
+                <div class="color-swatch" style="background-color: var(--color-neutral); color: black;">
+                    <strong>Neutral Color</strong>
+                    <p>#FFFFFF</p>
+                    <small>Contrast Ratio: 21:1</small>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Typography</h2>
+            <h1>Heading 1 - Inter</h1>
+            <h2>Heading 2 - Inter</h2>
+            <h3>Heading 3 - Inter</h3>
+            <p class="body-text">Body Text - Using Inter with a clean, modern Apple-style aesthetic.</p>
+            <p class="small-text">Small Text - Subtle and understated for secondary information.</p>
+        </section>
+
+        <section>
+            <h2>Spacing System</h2>
+            <div class="spacing-demo">
+                <div class="spacing-block" style="width: var(--spacing-xs)"></div>
+                <div class="spacing-block" style="width: var(--spacing-sm)"></div>
+                <div class="spacing-block" style="width: var(--spacing-md)"></div>
+                <div class="spacing-block" style="width: var(--spacing-lg)"></div>
+                <div class="spacing-block" style="width: var(--spacing-xl)"></div>
+            </div>
+            <p>Spacing blocks demonstrating size variations from xs to xl</p>
+        </section>
+
+        <section>
+            <h2>Interactive Components</h2>
+            <a href="#" class="button">Primary Button</a>
+            <a href="#" class="link">Standard Link</a>
+            <a href="#" class="link" style="color: var(--color-secondary);">Visited Link</a>
+        </section>
+    </div>
+</body>
+</html>
