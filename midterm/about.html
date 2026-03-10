@@ -1,55 +1,105 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About - Amelia Byerly</title>
+  <title>About — Amelia Byerly</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <header>
-    <h1>Amelia Byerly</h1>
-
-    <nav>
-      <ul>
-        <li><a href="home.html">Home</a></li>
-        <li>About</li>
-        <li><a href="work.html">Work</a></li>
-        <li><a href="resume.html">Resume</a></li>
-      </ul>
-    </nav>
+    <div class="container">
+      <h1><a href="home.html">Amelia Byerly</a></h1>
+      <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li>About</li>
+          <li><a href="work.html">Work</a></li>
+          <li><a href="resume.html">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <section>
-      <h2>About Me</h2>
-        <img src="images/aboutMePhoto.jpeg" alt="Photo of Amelia Byerly" height="500">
 
-      <section>
-        <h3>Background</h3>
-        <p>
-            I'm a second-year student at the University of Colorado Boulder majoring in Creative Technology 
-            and Design with a minor in Business. I am from Naples, Florida and attended Phillips Exeter Academy
-            in Exeter, New Hampshire for high school. I am also a member of the CU women's Division 1 lacrosse team 
-            and play for the Israeli National Lacrosse Team. In my free time, I enjoy reading, flying 
-            (I am an FAA licensed pilot), and hanging out with my friends and family.
-        </p>
-        <!-- Maybe add a skills section later -->
-      </section>
+    <section class="about-header">
+      <div class="container">
+        <p class="section-label">About</p>
+        <h2>About Me</h2>
+      </div>
     </section>
+
+    <section>
+      <div class="container">
+        <div class="about-grid">
+
+          <div class="about-img-wrap">
+            <img src="images/aboutMePhoto.jpeg" alt="Photo of Amelia Byerly">
+          </div>
+
+          <div class="about-body">
+            <p>
+              I'm a second-year student at the University of Colorado Boulder majoring in 
+              Creative Technology and Design with a minor in Business. Originally from Naples, Florida, 
+              I attended Phillips Exeter Academy in New Hampshire before coming to Boulder.
+            </p>
+            <p>
+              I'm a member of the CU women's Division I lacrosse team and play for the Israeli 
+              National Lacrosse Team. Outside of sport, I spend my time reading, flying 
+              (I am a licensed private pilot) and working on design projects that sit at the 
+              intersection of technology and human experience.
+            </p>
+            <p>
+              I'm focused on UI/UX design and front-end development, with an interest in building 
+              digital experiences that feel clear, considered, and genuinely useful.
+            </p>
+
+            <div class="about-facts">
+              <div class="fact-item">
+                <label>Based in</label>
+                <span>Boulder, CO</span>
+              </div>
+              <div class="fact-item">
+                <label>From</label>
+                <span>Naples, FL</span>
+              </div>
+              <div class="fact-item">
+                <label>Major</label>
+                <span>Creative Tech &amp; Design</span>
+              </div>
+              <div class="fact-item">
+                <label>Minor</label>
+                <span>Business</span>
+              </div>
+              <div class="fact-item">
+                <label>Sport</label>
+                <span>D1 &amp; Israel National Lacrosse</span>
+              </div>
+              <div class="fact-item">
+                <label>License</label>
+                <span>FAA Private Pilot Certificate</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
-    <h2>Contact</h2>
-    <ul>
-      <li><a href="mailto:ameliabyerly@gmail.com">Email</a></li>
-      <li><a href="https://www.linkedin.com/in/amelia-byerly">LinkedIn</a></li>
-      <li><a href="https://www.instagram.com/ameliabyerly/">Instagram</a></li>
-    </ul>
+    <div class="container">
+      <h2>Get in touch</h2>
+      <ul>
+        <li><a href="mailto:ameliabyerly@gmail.com">Email</a></li>
+        <li><a href="https://www.linkedin.com/in/amelia-byerly" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/ameliabyerly/" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
   </footer>
 
 </body>

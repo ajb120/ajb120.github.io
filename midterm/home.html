@@ -1,67 +1,96 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - Amelia Byerly</title>
+  <title>Home — Amelia Byerly</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <header>
-    <h1>Amelia Byerly</h1>
-
-    <nav>
-      <ul>
-        <li>Home</li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="work.html">Work</a></li>
-        <li><a href="resume.html">Resume</a></li>
-      </ul>
-    </nav>
+    <div class="container">
+      <h1><a href="home.html">Amelia Byerly</a></h1>
+      <nav>
+        <ul>
+          <li>Home</li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="work.html">Work</a></li>
+          <li><a href="resume.html">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <section>
-        <!-- Theroetical file names until I actually upload the projects -->
-      <h2>Featured Project</h2>
-      <a href="">
-        <figure>
-          <img src="images/featured-project.jpg" alt="Preview image of my monument concept project" width="500">
-          <figcaption>Featured Project</figcaption>
-        </figure>
-      </a>
 
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <div class="hero-text">
+            <p class="section-label">Portfolio</p>
+            <h2>Creative Technology &amp; Design</h2>
+            <p>
+              I'm a second-year student at CU Boulder studying Creative Technology and Design with a minor in Business.
+              I am focused on UI/UX, front-end development, and building experiences that are clear and intentional.
+            </p>
+            <a href="work.html" class="link-arrow">View my work →</a>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section>
-      <h2>Introduction</h2>
-      <p>
-        I'm a second-year student at the University of Colorado Boulder studying Creative Technology and Design.
-        I'm focused on UI/UX design and front-end development, with an interest in building clear, 
-        user-friendly digital experiences.
-      </p>
-
-      <h2>Current focus</h2>
-      <ul>
-        <li>UI design and interaction patterns</li>
-        <li>Prototyping and iteration</li>
-        <li>Building with semantic HTML</li>
-      </ul>
+    <!-- Featured Project -->
+    <section class="featured-project">
+      <div class="container">
+        <div class="featured-project-inner">
+          <a class="featured-img-wrap" href="work.html">
+            <img src="images/featured-project.jpg" alt="Preview of featured project — monument concept">
+          </a>
+          <div class="featured-info">
+            <p class="section-label">Featured Project</p>
+            <h3>Monument Concept</h3>
+            <p>
+              A concept project exploring how public memory is designed and contested through spatial experience.
+            </p>
+            <a href="work.html" class="link-arrow">See the project →</a>
+          </div>
+        </div>
+      </div>
     </section>
+
+    <!-- Current Focus -->
+    <section class="focus-section">
+      <div class="container">
+        <p class="section-label">Current Focus</p>
+        <div class="focus-list">
+          <div class="focus-item">
+            <h4>UI Design</h4>
+            <p>Interaction patterns and interface systems that feel obvious to use.</p>
+          </div>
+          <div class="focus-item">
+            <h4>Prototyping</h4>
+            <p>Fast iteration from sketch to high-fidelity — learning by making.</p>
+          </div>
+          <div class="focus-item">
+            <h4>Front-End</h4>
+            <p>Building with semantic HTML and learning to translate design into code.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
-    <h2>Contact</h2>
-    <ul>
-      <li><a href="mailto:ameliabyerly@gmail.com">Email</a></li>
-      <li><a href="https://www.linkedin.com/in/amelia-byerly">LinkedIn</a></li>
-      <li><a href="https://www.instagram.com/ameliabyerly/">Instagram</a></li>
-    </ul>
+    <div class="container">
+      <h2>Get in touch</h2>
+      <ul>
+        <li><a href="mailto:amelia.byerly@gmail.com">Email</a></li>
+        <li><a href="https://www.linkedin.com/in/amelia-byerly" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/ameliabyerly/" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
   </footer>
-
-</body>
-</html>

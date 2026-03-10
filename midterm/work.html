@@ -1,99 +1,109 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Work - Amelia Byerly</title>
+  <title>Work — Amelia Byerly</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <header>
-    <h1>Amelia Byerly</h1>
-
-    <nav>
-      <ul>
-        <li><a href="home.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li>Work</li>
-        <li><a href="resume.html">Resume</a></li>
-      </ul>
-    </nav>
+    <div class="container">
+      <h1><a href="home.html">Amelia Byerly</a></h1>
+      <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li>Work</li>
+          <li><a href="resume.html">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <section>
-      <h2>Projects</h2>
 
-      <section>
-        <h3>Project Gallery</h3>
-
-        <article id="project-placeholder">
-          <h4>Project Title Placeholder</h4>
-          <a href="work.html#project-placeholder">
-            <figure>
-              <img src="images/project-placeholder.jpg" alt="Placeholder preview image for a future project" width="500">
-              <figcaption>Future Project</figcaption>
-            </figure>
-          </a>
-          <p>
-            Add a short description of what was made, role, and what was learned.
-          </p>
-        </article>
-
-        <article id="project-placeholder2">
-          <h4>Project Title Placeholder</h4>
-          <a href="work.html#project-placeholder2">
-            <figure>
-              <img src="images/project-placeholder2.jpg" alt="Placeholder preview image for a future project" width="500">
-              <figcaption>Future Project</figcaption>
-            </figure>
-          </a>
-          <p>
-            Add a short description of what was made, role, and what was learned.
-          </p>
-        </article>
-
-        <article id="project-placeholder3">
-          <h4>Project Title Placeholder</h4>
-          <a href="work.html#project-placeholder3">
-            <figure>
-              <img src="images/project-placeholder3.jpg" alt="Placeholder preview image for a future project" width="500">
-              <figcaption>Future Project</figcaption>
-            </figure>
-          </a>
-          <p>
-            Add a short description of what was made, role, and what was learned.
-          </p>
-        </article>
-
-        <article id="project-placeholder4">
-          <h4>Project Title Placeholder</h4>
-          <a href="work.html#project-placeholder4">
-            <figure>
-              <img src="images/project-placeholder4.jpg" alt="Placeholder preview image for a future project" width="500">
-              <figcaption>Future Project</figcaption>
-            </figure>
-          </a>
-          <p>
-            Add a short description of what was made, role, and what was learned.
-          </p>
-        </article>
-
-      </section>
+    <section class="work-header">
+      <div class="container">
+        <p class="section-label">Selected Work</p>
+        <h2>Projects</h2>
+      </div>
     </section>
+
+    <section>
+      <div class="container">
+        <div class="work-grid">
+
+          <article class="project-card" id="project-placeholder">
+            <a href="#project-placeholder" class="project-card-img">
+              <img src="images/project-placeholder.jpg" alt="Project preview">
+            </a>
+            <div class="project-card-body">
+              <h4>Packaging Design / Branding / 2026</h4>
+              <h3>ab Coconut Water</h3>
+              <p>Developed a full brand identity and packaging system for an original coconut water product,
+                including logo, color palette, label design, and product photography mockup using Adobe Creative Suite.</p>
+              <a href="#project-placeholder" class="link-arrow">View project →</a>
+            </div>
+          </article>
+
+          <article class="project-card" id="project-placeholder2">
+            <a href="#project-placeholder2" class="project-card-img">
+              <img src="images/project-placeholder2.jpg" alt="Project preview">
+            </a>
+            <div class="project-card-body">
+              <h4>Front-End / 2024</h4>
+              <h3>Project Title</h3>
+              <p>Add a short description of what was made, your role, and what you learned.</p>
+              <a href="#project-placeholder2" class="link-arrow">View project →</a>
+            </div>
+          </article>
+
+          <article class="project-card" id="project-placeholder3">
+            <a href="#project-placeholder3" class="project-card-img">
+              <img src="images/project-placeholder3.jpg" alt="Project preview">
+            </a>
+            <div class="project-card-body">
+              <h4>Print Design / 2025</h4>
+              <h3>Colorado Symphony Mailer</h3>
+              <p>Designed a direct mail campaign for a fictional Colorado Symphony season, 
+                exploring typographic hierarchy, print layout, and brand identity for a classical 
+                music audience using Adobe Illustrator and InDesign.</p>
+              <a href="#project-placeholder3" class="link-arrow">View project →</a>
+            </div>
+          </article>
+
+          <article class="project-card" id="project-placeholder4">
+            <a href="#project-placeholder4" class="project-card-img">
+              <img src="images/project-placeholder4.jpg" alt="Project preview">
+            </a>
+            <div class="project-card-body">
+              <h4>UI Design / 2025</h4>
+              <h3>Berkshire Hathaway Redesign</h3>
+              <p>Redesigned Berkshire Hathaway's website in Figma, modernizing its 
+                information architecture and visual language while maintaining the brand's 
+                established credibility.</p>
+              <a href="#project-placeholder4" class="link-arrow">View project →</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
-    <h2>Contact</h2>
-    <ul>
-      <li><a href="mailto:ameliabyerly@gmail.com">Email</a></li>
-      <li><a href="https://www.linkedin.com/in/amelia-byerly">LinkedIn</a></li>
-      <li><a href="https://www.instagram.com/ameliabyerly/">Instagram</a></li>
-    </ul>
+    <div class="container">
+      <h2>Get in touch</h2>
+      <ul>
+        <li><a href="mailto:ameliabyerly@gmail.com">Email</a></li>
+        <li><a href="https://www.linkedin.com/in/amelia-byerly" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/ameliabyerly/" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </div>
   </footer>
 
 </body>
