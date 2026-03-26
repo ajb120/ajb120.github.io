@@ -1,0 +1,185 @@
+/* ICA 11 Stylesheet — matches ajb120.github.io/midterm */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap');
+
+:root {
+  --color-bg:         #FAF9F6;
+  --color-bg-dark:    #1A1916;
+  --color-text:       #1A1916;
+  --color-muted:      #8A8880;
+  --color-accent:     #5A86AD;
+  --color-secondary:  #F88369;
+  --color-border:     #E4E2DC;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  --spacing-xs:  0.375rem;
+  --spacing-sm:  0.75rem;
+  --spacing-md:  1.5rem;
+  --spacing-lg:  3rem;
+
+  --max-width: 700px;
+}
+
+*, *::before, *::after { 
+  box-sizing: border-box; margin: 0; padding: 0; 
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+/* Header */
+header {
+  max-width: var(--max-width);
+  margin: 0 auto var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+header h1 {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+header p {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+}
+
+/* Main */
+main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Input */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.input-group label {
+  font-size: 0.72rem;
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+input[type="text"] {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: var(--color-accent);
+}
+
+input[type="text"]::placeholder {
+  color: var(--color-border);
+}
+
+/* Fieldset */
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+legend {
+  font-size: 0.72rem;
+  font-family: var(--font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding: 0 var(--spacing-xs);
+}
+
+fieldset label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+/* Button */
+button.generate {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background-color: var(--color-accent);
+  border: none;
+  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  transition: opacity 0.2s;
+  align-self: flex-start;
+}
+
+button.generate:hover {
+  opacity: 0.85;
+}
+
+button.generate:active {
+  opacity: 0.7;
+}
+
+/* Story output */
+.story {
+  visibility: hidden;
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--color-text);
+  padding: var(--spacing-md);
+  border-left: 3px solid var(--color-secondary);
+  background-color: #fff;
+  border-radius: 0 4px 4px 0;
+  max-width: none;
+}

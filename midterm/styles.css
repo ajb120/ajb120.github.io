@@ -24,7 +24,7 @@
   --nav-height: 72px;
 }
 
-/* Reset */
+/* Reset defaut css */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 img { 
@@ -52,7 +52,7 @@ body {
   font-size: 16px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased; /* inspo from YT video for crisper text */
-  display: grid;                        /* FIX: pushes footer to bottom without margin-top hack */
+  display: grid;                        /* pushes footer to bottom without margin-top hack */
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
 }
