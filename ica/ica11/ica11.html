@@ -48,12 +48,12 @@
             return array[random];
         }
 
-        const characters = ["Papa Smurf", "a rogue Surfside", "Ralphie"];
-        const places = ["the Flatirons", "Folsom Field", "the Naples, FL Whole Foods"];
+        const characters = ["Papa Smurf", "Bibble", "Ralphie"];
+        const places = ["the CU Rec Center", "Folsom Field", "your mom's house"];
         const events = [
             "attempted a backflip and immediately regretted it",
             "declared itself a sovereign nation and refused to leave",
-            "filed a formal complaint with the FAA"
+            "filed a formal complaint with the University of Colorado about the heat and was promptly ignored"
         ];
 
         function returnRandomStoryString() {
@@ -62,9 +62,9 @@
             const randomEvent = randomValueFromArray(events);
 
             let storyText = `It was 94 Fahrenheit in Boulder, so ${randomCharacter} decided to take the day off. 
-            After somehow ending up at ${randomPlace}, it stared into the middle distance for a few moments, 
+            After somehow ending up at ${randomPlace}, it stared into the distance for a few moments, 
             then ${randomEvent}. Bob witnessed the whole thing but was completely unbothered — 
-            ${randomCharacter} weighs 300 pounds and had an 8am practice the next morning anyway.`;
+            ${randomCharacter} weighs 300 pounds and Bob had an 8am practice the next morning anyway.`;
 
             return storyText;
         }
