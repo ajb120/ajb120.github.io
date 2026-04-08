@@ -1,0 +1,843 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlightPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sky: #0a1628;
+    --sky2: #0f2040;
+    --panel: #0d1c35;
+    --card: #112040;
+    --border: rgba(100,160,255,0.15);
+    --border2: rgba(100,160,255,0.3);
+    --blue: #4a9eff;
+    --blue2: #2176e8;
+    --gold: #f5c842;
+    --green: #3ddc84;
+    --red: #ff5c5c;
+    --text: #c8deff;
+    --text2: rgba(200,222,255,0.5);
+    --node-size: 18px;
+  }
+
+  body {
+    background: var(--sky);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Stars bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 25%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 65%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 80% 45%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.4) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,22,40,0.85);
+    backdrop-filter: blur(8px);
+    position: relative;
+    z-index: 10;
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+  .logo span { color: var(--blue); }
+
+  .header-stats {
+    display: flex;
+    gap: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+  .stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .stat-label { color: var(--text2); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-val { color: var(--gold); font-weight: 500; font-size: 15px; }
+
+  .game-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: rgba(13,28,53,0.9);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px;
+    gap: 16px;
+    overflow-y: auto;
+  }
+
+  .mission-card {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .mission-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+  .mission-airports {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .arrow-icon { color: var(--text2); font-size: 14px; }
+  .origin { color: var(--green); }
+  .dest { color: var(--red); }
+
+  .route-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .route-stops {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+  .route-stop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--blue);
+  }
+  .route-stop .dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; flex-shrink: 0; }
+  .route-cost {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .route-cost span:last-child { color: var(--gold); font-weight: 500; }
+
+  .btn {
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary {
+    background: var(--blue2);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--blue); transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+
+  .legend {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Map canvas area */
+  .map-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #map-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Result overlay */
+  .result-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,22,40,0.92);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 20;
+    backdrop-filter: blur(6px);
+  }
+  .result-overlay.visible { display: flex; }
+
+  .result-box {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    padding: 32px 40px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+  }
+  .result-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .result-sub { color: var(--text2); font-size: 14px; margin-bottom: 24px; }
+  .result-scores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .score-card {
+    background: rgba(10,22,40,0.6);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .score-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); margin-bottom: 4px; }
+  .score-card .val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; }
+  .score-card .val.yours { color: var(--gold); }
+  .score-card .val.optimal { color: var(--green); }
+  .efficiency-bar-wrap { margin-bottom: 24px; }
+  .efficiency-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; text-align: left; }
+  .efficiency-bar { height: 8px; background: rgba(100,160,255,0.15); border-radius: 4px; overflow: hidden; }
+  .efficiency-fill { height: 100%; border-radius: 4px; background: var(--green); transition: width 0.8s ease; }
+  .score-grade { font-size: 56px; font-weight: 800; margin-bottom: 4px; }
+  .result-btns { display: flex; gap: 10px; }
+  .result-btns .btn { flex: 1; }
+
+  /* Phase banner */
+  .phase-banner {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(13,28,53,0.95);
+    border: 1px solid var(--border2);
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 5;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .phase-banner.dijkstra { border-color: var(--green); color: var(--green); }
+  .phase-banner.player { border-color: var(--gold); color: var(--gold); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Flight<span>Path</span></div>
+  <div class="header-stats">
+    <div class="stat"><span class="stat-label">Round</span><span class="stat-val" id="hdr-round">1</span></div>
+    <div class="stat"><span class="stat-label">Score</span><span class="stat-val" id="hdr-score">0</span></div>
+    <div class="stat"><span class="stat-label">Best</span><span class="stat-val" id="hdr-best">—</span></div>
+  </div>
+</header>
+
+<div class="game-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="mission-card">
+      <div class="mission-label">Mission</div>
+      <div class="mission-airports">
+        <span class="origin" id="origin-label">—</span>
+        <span class="arrow-icon">→</span>
+        <span class="dest" id="dest-label">—</span>
+      </div>
+      <div style="font-size:12px; color: var(--text2); margin-top:8px;" id="mission-desc">Click your origin airport to begin.</div>
+    </div>
+
+    <div class="route-card">
+      <div class="mission-label">Your Route</div>
+      <div class="route-stops" id="route-stops">
+        <span style="color:var(--text2); font-size:12px;">No stops yet</span>
+      </div>
+      <div class="route-cost">
+        <span>Total distance</span>
+        <span id="route-total">0 nm</span>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="submit-btn" disabled>Submit Route</button>
+    <button class="btn btn-ghost" id="undo-btn" disabled>↩ Undo Last Stop</button>
+    <button class="btn btn-ghost" id="reset-btn">Reset Route</button>
+
+    <div class="legend">
+      <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text2); margin-bottom:8px;">Legend</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#3ddc84"></div> Origin</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ff5c5c"></div> Destination</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4a9eff"></div> Selected stop</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(200,222,255,0.4)"></div> Unvisited</div>
+      <div style="margin-top:8px; font-size:11px; line-height:1.6;">Numbers on routes = distance in nautical miles. Find the shortest path!</div>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="map-area">
+    <div class="phase-banner player" id="phase-banner">✈ Plot your route</div>
+    <svg id="map-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+</div>
+
+<!-- Result Overlay -->
+<div class="result-overlay" id="result-overlay">
+  <div class="result-box">
+    <div class="score-grade" id="res-grade">A</div>
+    <div class="result-title" id="res-title">Excellent routing!</div>
+    <div class="result-sub" id="res-sub">You were close to the optimal path.</div>
+    <div class="result-scores">
+      <div class="score-card">
+        <div class="label">Your distance</div>
+        <div class="val yours" id="res-yours">—</div>
+      </div>
+      <div class="score-card">
+        <div class="label">Optimal</div>
+        <div class="val optimal" id="res-optimal">—</div>
+      </div>
+    </div>
+    <div class="efficiency-bar-wrap">
+      <div class="efficiency-label">Efficiency: <span id="res-eff">—</span></div>
+      <div class="efficiency-bar"><div class="efficiency-fill" id="res-fill" style="width:0%"></div></div>
+    </div>
+    <div class="result-btns">
+      <button class="btn btn-ghost" id="replay-btn">Watch Dijkstra's</button>
+      <button class="btn btn-primary" id="next-btn">Next Round →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Graph Data ───────────────────────────────────────────────────────────────
+const AIRPORTS = [
+  { id: 'DEN', name: 'Denver',      x: 0.32, y: 0.42 },
+  { id: 'LAX', name: 'Los Angeles', x: 0.10, y: 0.62 },
+  { id: 'SFO', name: 'San Francisco', x: 0.07, y: 0.38 },
+  { id: 'SEA', name: 'Seattle',     x: 0.10, y: 0.15 },
+  { id: 'PHX', name: 'Phoenix',     x: 0.18, y: 0.68 },
+  { id: 'ORD', name: 'Chicago',     x: 0.58, y: 0.28 },
+  { id: 'ATL', name: 'Atlanta',     x: 0.62, y: 0.60 },
+  { id: 'DFW', name: 'Dallas',      x: 0.43, y: 0.65 },
+  { id: 'JFK', name: 'New York',    x: 0.88, y: 0.28 },
+  { id: 'MIA', name: 'Miami',       x: 0.72, y: 0.80 },
+  { id: 'MSP', name: 'Minneapolis', x: 0.52, y: 0.17 },
+  { id: 'SLC', name: 'Salt Lake',   x: 0.21, y: 0.35 },
+  { id: 'BOS', name: 'Boston',      x: 0.91, y: 0.18 },
+  { id: 'IAH', name: 'Houston',     x: 0.46, y: 0.78 },
+  { id: 'LAS', name: 'Las Vegas',   x: 0.15, y: 0.52 },
+];
+
+const EDGES = [
+  ['DEN','ORD',920], ['DEN','DFW',660], ['DEN','SLC',390], ['DEN','LAX',860],
+  ['DEN','PHX',600], ['DEN','MSP',700],
+  ['LAX','SFO',340], ['LAX','LAS',240], ['LAX','PHX',370], ['LAX','SLC',590],
+  ['SFO','SEA',680], ['SFO','SLC',600], ['SFO','LAS',420],
+  ['SEA','SLC',690], ['SEA','MSP',1020],
+  ['PHX','DFW',870], ['PHX','LAS',260], ['PHX','IAH',1020],
+  ['ORD','JFK',740], ['ORD','ATL',600], ['ORD','MSP',330], ['ORD','DFW',800],
+  ['ATL','JFK',860], ['ATL','MIA',595], ['ATL','DFW',720], ['ATL','IAH',790],
+  ['DFW','IAH',240], ['DFW','MSP',860],
+  ['JFK','BOS',190], ['JFK','MIA',1090],
+  ['MIA','IAH',1190],
+  ['MSP','ORD',330],
+  ['SLC','LAS',370], ['SLC','SFO',600],
+  ['LAS','LAX',240],
+  ['BOS','JFK',190],
+];
+
+// Build adjacency list
+const graph = {};
+AIRPORTS.forEach(a => graph[a.id] = []);
+EDGES.forEach(([a, b, w]) => {
+  graph[a].push({ to: b, w });
+  graph[b].push({ to: a, w });
+});
+
+// ─── Game State ───────────────────────────────────────────────────────────────
+let state = {
+  phase: 'player',   // 'player' | 'result' | 'dijkstra'
+  origin: null,
+  dest: null,
+  route: [],
+  routeCost: 0,
+  score: 0,
+  round: 1,
+  best: null,
+  dijkstraPath: [],
+  dijkstraCost: 0,
+};
+
+// ─── Dijkstra's Algorithm ────────────────────────────────────────────────────
+function dijkstra(start, end) {
+  const dist = {};
+  const prev = {};
+  const visited = new Set();
+  AIRPORTS.forEach(a => dist[a.id] = Infinity);
+  dist[start] = 0;
+
+  // Simple priority queue via sorted array
+  const pq = [{ id: start, d: 0 }];
+
+  while (pq.length) {
+    pq.sort((a, b) => a.d - b.d);
+    const { id: u } = pq.shift();
+    if (visited.has(u)) continue;
+    visited.add(u);
+    if (u === end) break;
+
+    for (const { to, w } of graph[u]) {
+      if (visited.has(to)) continue;
+      const alt = dist[u] + w;
+      if (alt < dist[to]) {
+        dist[to] = alt;
+        prev[to] = u;
+        pq.push({ id: to, d: alt });
+      }
+    }
+  }
+
+  // Reconstruct path
+  const path = [];
+  let cur = end;
+  while (cur) { path.unshift(cur); cur = prev[cur]; }
+  return { path, cost: dist[end] };
+}
+
+// ─── SVG Rendering ───────────────────────────────────────────────────────────
+const svg = document.getElementById('map-svg');
+let svgW = 0, svgH = 0;
+
+function px(airport) {
+  return {
+    x: airport.x * svgW,
+    y: airport.y * svgH,
+  };
+}
+
+function getAirport(id) {
+  return AIRPORTS.find(a => a.id === id);
+}
+
+function edgeIsInRoute(a, b, route) {
+  for (let i = 0; i < route.length - 1; i++) {
+    if ((route[i] === a && route[i+1] === b) || (route[i] === b && route[i+1] === a)) return true;
+  }
+  return false;
+}
+
+function renderMap() {
+  svgW = svg.clientWidth || 800;
+  svgH = svg.clientHeight || 600;
+  svg.innerHTML = '';
+
+  const { route, origin, dest, phase, dijkstraPath } = state;
+
+  // Draw edges
+  EDGES.forEach(([a, b, w]) => {
+    const pa = px(getAirport(a));
+    const pb = px(getAirport(b));
+
+    const inPlayerRoute = edgeIsInRoute(a, b, route);
+    const inDijkstra = edgeIsInRoute(a, b, dijkstraPath);
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', pa.x); line.setAttribute('y1', pa.y);
+    line.setAttribute('x2', pb.x); line.setAttribute('y2', pb.y);
+
+    if (phase === 'dijkstra' && inDijkstra) {
+      line.setAttribute('stroke', '#3ddc84');
+      line.setAttribute('stroke-width', 3);
+      line.setAttribute('stroke-opacity', 0.9);
+    } else if (inPlayerRoute) {
+      line.setAttribute('stroke', '#4a9eff');
+      line.setAttribute('stroke-width', 2.5);
+      line.setAttribute('stroke-opacity', 0.85);
+    } else {
+      line.setAttribute('stroke', 'rgba(100,160,255,0.18)');
+      line.setAttribute('stroke-width', 1.5);
+    }
+    svg.appendChild(line);
+
+    // Weight label
+    const mx = (pa.x + pb.x) / 2;
+    const my = (pa.y + pb.y) / 2;
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', mx);
+    label.setAttribute('y', my - 5);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('font-family', 'DM Mono, monospace');
+    label.setAttribute('font-size', '11');
+    label.setAttribute('fill', inPlayerRoute || (phase === 'dijkstra' && inDijkstra)
+      ? 'rgba(255,255,255,0.7)' : 'rgba(100,160,255,0.35)');
+    label.textContent = w;
+    svg.appendChild(label);
+  });
+
+  // Draw airport nodes
+  AIRPORTS.forEach(airport => {
+    const { x, y } = px(airport);
+    const isOrigin = airport.id === origin;
+    const isDestination = airport.id === dest;
+    const inRoute = route.includes(airport.id);
+    const inDijk = dijkstraPath.includes(airport.id);
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.style.cursor = 'pointer';
+
+    // Outer ring for origin/dest
+    if (isOrigin || isDestination) {
+      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      ring.setAttribute('cx', x); ring.setAttribute('cy', y); ring.setAttribute('r', 20);
+      ring.setAttribute('fill', 'none');
+      ring.setAttribute('stroke', isOrigin ? '#3ddc84' : '#ff5c5c');
+      ring.setAttribute('stroke-width', 1.5);
+      ring.setAttribute('stroke-opacity', 0.5);
+      g.appendChild(ring);
+    }
+
+    // Main circle
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', 13);
+
+    let fill = 'rgba(15,32,64,0.9)';
+    let stroke = 'rgba(100,160,255,0.4)';
+    let strokeW = 1.5;
+
+    if (isOrigin) { fill = 'rgba(61,220,132,0.2)'; stroke = '#3ddc84'; strokeW = 2; }
+    else if (isDestination) { fill = 'rgba(255,92,92,0.2)'; stroke = '#ff5c5c'; strokeW = 2; }
+    else if (phase === 'dijkstra' && inDijk) { fill = 'rgba(61,220,132,0.15)'; stroke = '#3ddc84'; strokeW = 1.5; }
+    else if (inRoute) { fill = 'rgba(74,158,255,0.2)'; stroke = '#4a9eff'; strokeW = 2; }
+
+    circle.setAttribute('fill', fill);
+    circle.setAttribute('stroke', stroke);
+    circle.setAttribute('stroke-width', strokeW);
+    g.appendChild(circle);
+
+    // IATA code
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', x); text.setAttribute('y', y + 1);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('font-family', 'DM Mono, monospace');
+    text.setAttribute('font-size', '9');
+    text.setAttribute('font-weight', '500');
+    text.setAttribute('fill', inRoute || isOrigin || isDestination ? '#fff' : 'rgba(200,222,255,0.6)');
+    text.textContent = airport.id;
+    g.appendChild(text);
+
+    // Name label below
+    const nameLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    nameLabel.setAttribute('x', x);
+    nameLabel.setAttribute('y', y + 24);
+    nameLabel.setAttribute('text-anchor', 'middle');
+    nameLabel.setAttribute('font-family', 'Syne, sans-serif');
+    nameLabel.setAttribute('font-size', '10');
+    nameLabel.setAttribute('fill', 'rgba(200,222,255,0.5)');
+    nameLabel.textContent = airport.name;
+    g.appendChild(nameLabel);
+
+    if (phase === 'player') {
+      g.addEventListener('click', () => handleAirportClick(airport.id));
+      g.addEventListener('mouseenter', () => {
+        circle.setAttribute('stroke-opacity', '0.9');
+        circle.setAttribute('r', '15');
+      });
+      g.addEventListener('mouseleave', () => {
+        circle.setAttribute('stroke-opacity', '1');
+        circle.setAttribute('r', '13');
+      });
+    }
+
+    svg.appendChild(g);
+  });
+}
+
+// ─── Click Logic ─────────────────────────────────────────────────────────────
+function handleAirportClick(id) {
+  if (state.phase !== 'player') return;
+
+  const { origin, dest, route } = state;
+
+  // Must start from origin
+  if (route.length === 0) {
+    if (id !== origin) {
+      flash('Start at ' + origin);
+      return;
+    }
+    state.route = [id];
+    updateUI();
+    return;
+  }
+
+  const last = route[route.length - 1];
+
+  // Can't revisit
+  if (route.includes(id) && id !== dest) {
+    flash('Already visited ' + id);
+    return;
+  }
+
+  // Must be connected to last node
+  const connected = graph[last].some(e => e.to === id);
+  if (!connected) {
+    flash('No direct route from ' + last + ' to ' + id);
+    return;
+  }
+
+  // Add stop
+  const edgeCost = graph[last].find(e => e.to === id).w;
+  state.routeCost += edgeCost;
+  state.route.push(id);
+
+  // Check if reached destination
+  if (id === dest) {
+    document.getElementById('submit-btn').disabled = false;
+  }
+
+  updateUI();
+}
+
+// ─── UI Updates ──────────────────────────────────────────────────────────────
+function updateUI() {
+  const { route, routeCost, origin, dest, round, score, best } = state;
+
+  // Header
+  document.getElementById('hdr-round').textContent = round;
+  document.getElementById('hdr-score').textContent = score;
+  document.getElementById('hdr-best').textContent = best !== null ? best + '%' : '—';
+
+  // Mission
+  document.getElementById('origin-label').textContent = origin || '—';
+  document.getElementById('dest-label').textContent = dest || '—';
+
+  const atDest = route.length > 0 && route[route.length - 1] === dest;
+  document.getElementById('mission-desc').textContent =
+    route.length === 0 ? 'Click ' + origin + ' to begin your route.' :
+    atDest ? 'You\'ve reached ' + dest + '. Submit your route!' :
+    'Click connected airports to build your route to ' + dest + '.';
+
+  // Route stops
+  const stopsEl = document.getElementById('route-stops');
+  if (route.length === 0) {
+    stopsEl.innerHTML = '<span style="color:var(--text2); font-size:12px;">No stops yet</span>';
+  } else {
+    stopsEl.innerHTML = route.map((id, i) => `
+      <div class="route-stop">
+        <div class="dot"></div>
+        <span>${id}${i === 0 ? ' (origin)' : id === dest && i === route.length-1 ? ' (dest)' : ''}</span>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('route-total').textContent = routeCost + ' nm';
+  document.getElementById('undo-btn').disabled = route.length <= 1;
+  document.getElementById('submit-btn').disabled = !atDest;
+
+  renderMap();
+}
+
+function flash(msg) {
+  const banner = document.getElementById('phase-banner');
+  const prev = banner.textContent;
+  banner.textContent = '⚠ ' + msg;
+  banner.style.borderColor = '#f5c842';
+  banner.style.color = '#f5c842';
+  setTimeout(() => {
+    banner.textContent = prev;
+    banner.style.borderColor = '';
+    banner.style.color = '';
+  }, 1500);
+}
+
+// ─── Submit & Result ──────────────────────────────────────────────────────────
+function submitRoute() {
+  const { routeCost, dijkstraCost, origin, dest } = state;
+  const { path, cost } = dijkstra(origin, dest);
+  state.dijkstraPath = path;
+  state.dijkstraCost = cost;
+
+  const efficiency = Math.min(100, Math.round((cost / routeCost) * 100));
+  const grade = efficiency >= 95 ? 'S' : efficiency >= 80 ? 'A' : efficiency >= 60 ? 'B' : efficiency >= 40 ? 'C' : 'D';
+  const pts = efficiency >= 95 ? 300 : efficiency >= 80 ? 200 : efficiency >= 60 ? 100 : 50;
+
+  state.score += pts;
+  state.best = state.best === null ? efficiency : Math.max(state.best, efficiency);
+  state.phase = 'result';
+
+  // Fill result overlay
+  document.getElementById('res-grade').textContent = grade;
+  document.getElementById('res-grade').style.color =
+    grade === 'S' ? '#3ddc84' : grade === 'A' ? '#4a9eff' : grade === 'B' ? '#f5c842' : '#ff5c5c';
+  document.getElementById('res-title').textContent =
+    grade === 'S' ? 'Perfect routing!' : grade === 'A' ? 'Excellent routing!' :
+    grade === 'B' ? 'Decent route.' : grade === 'C' ? 'Needs improvement.' : 'Better luck next time.';
+  document.getElementById('res-sub').textContent =
+    efficiency >= 95 ? 'You found the optimal path!' :
+    `Dijkstra's found a ${cost} nm path. Yours was ${routeCost} nm.`;
+
+  document.getElementById('res-yours').textContent = routeCost + ' nm';
+  document.getElementById('res-optimal').textContent = cost + ' nm';
+  document.getElementById('res-eff').textContent = efficiency + '%';
+  setTimeout(() => {
+    document.getElementById('res-fill').style.width = efficiency + '%';
+  }, 100);
+
+  document.getElementById('result-overlay').classList.add('visible');
+  updateUI();
+}
+
+// ─── Dijkstra Replay ──────────────────────────────────────────────────────────
+function replayDijkstra() {
+  document.getElementById('result-overlay').classList.remove('visible');
+  state.phase = 'dijkstra';
+  state.dijkstraPath = [];
+
+  const banner = document.getElementById('phase-banner');
+  banner.className = 'phase-banner dijkstra';
+  banner.textContent = '▶ Dijkstra\'s algorithm running...';
+
+  const { path } = dijkstra(state.origin, state.dest);
+  let i = 0;
+
+  const step = () => {
+    if (i >= path.length) {
+      banner.textContent = '✓ Optimal path found!';
+      setTimeout(() => showResultAgain(), 1800);
+      return;
+    }
+    state.dijkstraPath = path.slice(0, i + 1);
+    renderMap();
+    i++;
+    setTimeout(step, 600);
+  };
+  step();
+}
+
+function showResultAgain() {
+  document.getElementById('result-overlay').classList.add('visible');
+}
+
+// ─── New Round ────────────────────────────────────────────────────────────────
+function newRound() {
+  document.getElementById('result-overlay').classList.remove('visible');
+
+  // Pick random origin and dest (not same, not adjacent)
+  let o, d;
+  do {
+    o = AIRPORTS[Math.floor(Math.random() * AIRPORTS.length)].id;
+    d = AIRPORTS[Math.floor(Math.random() * AIRPORTS.length)].id;
+  } while (o === d || graph[o].some(e => e.to === d));
+
+  state.origin = o;
+  state.dest = d;
+  state.route = [];
+  state.routeCost = 0;
+  state.dijkstraPath = [];
+  state.dijkstraCost = 0;
+  state.phase = 'player';
+  state.round++;
+
+  const banner = document.getElementById('phase-banner');
+  banner.className = 'phase-banner player';
+  banner.textContent = '✈ Plot your route';
+
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('undo-btn').disabled = true;
+
+  updateUI();
+}
+
+function resetRoute() {
+  state.route = [];
+  state.routeCost = 0;
+  document.getElementById('submit-btn').disabled = true;
+  updateUI();
+}
+
+function undoLast() {
+  if (state.route.length <= 1) return;
+  const removed = state.route.pop();
+  const last = state.route[state.route.length - 1];
+  const edge = graph[last].find(e => e.to === removed);
+  if (edge) state.routeCost -= edge.w;
+  document.getElementById('submit-btn').disabled = true;
+  updateUI();
+}
+
+// ─── Event Listeners ──────────────────────────────────────────────────────────
+document.getElementById('submit-btn').addEventListener('click', submitRoute);
+document.getElementById('undo-btn').addEventListener('click', undoLast);
+document.getElementById('reset-btn').addEventListener('click', resetRoute);
+document.getElementById('replay-btn').addEventListener('click', replayDijkstra);
+document.getElementById('next-btn').addEventListener('click', newRound);
+
+window.addEventListener('resize', () => renderMap());
+
+// ─── Start ────────────────────────────────────────────────────────────────────
+newRound();
+state.round = 1;
+state.score = 0;
+document.getElementById('hdr-round').textContent = 1;
+document.getElementById('hdr-score').textContent = 0;
+</script>
+</body>
+</html>
