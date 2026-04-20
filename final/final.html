@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volume Control</title>
+  <style>
+    * {
+      font-family: 'Times New Roman', Times, serif;
+      color: black;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: white;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      background: white;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 0 0.25rem;
+    }
+
+    p.sub {
+      font-size: 13px;
+      margin: 0 0 2rem;
+    }
+
+    .vol-display {
+      font-size: 56px;
+      font-weight: bold;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .vol-label {
+      font-size: 12px;
+      margin-bottom: 2.5rem;
+    }
+
+    .slider-wrap {
+      position: absolute;
+      width: 220px;
+      z-index: 5;
+    }
+
+    .info-row {
+      font-size: 13px;
+      margin-bottom: 0.4rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .taunt {
+      font-size: 13px;
+      min-height: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 1px;
+      pointer-events: none;
+      animation: cfall 1.6s ease-in forwards;
+      z-index: 20;
+    }
+
+    @keyframes cfall {
+      0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(540deg); opacity: 0; }
+    }
+
+    .win-msg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 1px solid black;
+      padding: 1.25rem 2rem;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 10;
+    }
+
+    .win-msg.show { opacity: 1; }
+
+    .win-msg p {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 0 0 4px;
+    }
+
+    .win-msg small {
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <h2>Volume Control</h2>
+  <p class="sub">Drag the slider to set the volume.</p>
+
+  <div class="vol-display" id="volNum">50</div>
+  <div class="vol-label">volume</div>
+
+  <div class="slider-wrap" id="sliderWrap" style="left: 160px; top: 220px;">
+    <input type="range" id="slider" min="0" max="100" value="50" step="1" style="width:100%;">
+  </div>
+
+  <div class="info-row" style="margin-top: 160px;">Misses: <strong id="missCount">0</strong></div>
+  <div class="taunt" id="taunt">Try to grab the slider.</div>
+
+  <div class="win-msg" id="winMsg">
+    <p>You did it.</p>
+    <small>Volume has been set.</small>
+  </div>
+</div>
+
+<script>
+  const app = document.getElementById('app');
+  const wrap = document.getElementById('sliderWrap');
+  const slider = document.getElementById('slider');
+  const volNum = document.getElementById('volNum');
+  const tauntEl = document.getElementById('taunt');
+  const missCountEl = document.getElementById('missCount');
+  const winMsg = document.getElementById('winMsg');
+
+  let misses = 0;
+  let dragging = false;
+  let won = false;
+  let lastFlee = 0;
+
+  const messages = [
+    "Try to grab the slider.",
+    "Please try again.",
+    "The slider has moved.",
+    "Try moving more slowly.",
+    "Please keep trying.",
+    "The slider is still available.",
+    "You are getting closer.",
+    "Please try again.",
+    "The slider can be caught.",
+    "Keep going.",
+    "You are making progress.",
+    "Almost there.",
+    "Please continue.",
+    "Try again.",
+    "You can do it.",
+  ];
+
+  function flee(cursorX, cursorY) {
+    if (dragging || won) return;
+    const now = Date.now();
+    if (now - lastFlee < 100) return;
+    lastFlee = now;
+
+    misses++;
+    missCountEl.textContent = misses;
+    tauntEl.textContent = messages[Math.min(misses, messages.length - 1)];
+
+    const appRect = app.getBoundingClientRect();
+    const wrapW = wrap.offsetWidth;
+    const wrapH = wrap.offsetHeight || 30;
+    const padding = 12;
+
+    const maxX = appRect.width - wrapW - padding;
+    const maxY = appRect.height - wrapH - padding;
+
+    const currentX = parseFloat(wrap.style.left) || 160;
+    const currentY = parseFloat(wrap.style.top) || 220;
+
+    const relCX = cursorX - appRect.left;
+    const relCY = cursorY - appRect.top;
+
+    const dx = currentX + wrapW / 2 - relCX;
+    const dy = currentY + wrapH / 2 - relCY;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+
+    const fleeStrength = Math.min(120 + misses * 10, 300);
+    let newX = currentX + (dx / len) * fleeStrength;
+    let newY = currentY + (dy / len) * fleeStrength;
+
+    newX = Math.max(padding, Math.min(newX, maxX));
+    newY = Math.max(padding, Math.min(newY, maxY));
+
+    const duration = Math.max(60, 200 - misses * 10);
+    wrap.style.transition = `left ${duration}ms ease-out, top ${duration}ms ease-out`;
+    wrap.style.left = newX + 'px';
+    wrap.style.top = newY + 'px';
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    if (dragging || won) return;
+    const r = wrap.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const dist = Math.sqrt((e.clientX - cx) ** 2 + (e.clientY - cy) ** 2);
+    if (dist < 50) flee(e.clientX, e.clientY);
+  });
+
+  slider.addEventListener('mouseenter', (e) => flee(e.clientX, e.clientY));
+
+  slider.addEventListener('mousedown', () => {
+    dragging = true;
+    wrap.style.transition = 'none';
+  });
+
+  slider.addEventListener('input', () => {
+    volNum.textContent = slider.value;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (dragging && !won && misses >= 2) celebrate();
+    dragging = false;
+  });
+
+  function celebrate() {
+    won = true;
+    winMsg.classList.add('show');
+    spawnConfetti();
+    setTimeout(() => {
+      winMsg.classList.remove('show');
+      won = false;
+      misses = 0;
+      missCountEl.textContent = 0;
+      tauntEl.textContent = 'Try to grab the slider.';
+      wrap.style.transition = 'none';
+      wrap.style.left = '160px';
+      wrap.style.top = '220px';
+    }, 3000);
+  }
+
+  const colors = ['#e84c3d', '#f0a500', '#3db87a', '#5b9cf6', '#c084fc', '#f472b6'];
+
+  function spawnConfetti() {
+    for (let i = 0; i < 36; i++) {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = '0';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDelay = Math.random() * 0.4 + 's';
+        p.style.animationDuration = (1.2 + Math.random() * 0.8) + 's';
+        app.appendChild(p);
+        setTimeout(() => p.remove(), 2500);
+      }, i * 25);
+    }
+  }
+</script>
+
+</body>
+</html>
