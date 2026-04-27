@@ -30,44 +30,43 @@
     }
 
     h2 {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: bold;
       margin: 0 0 0.25rem;
     }
 
     p.sub {
-      font-size: 13px;
+      font-size: 15px;
       margin: 0 0 2rem;
     }
 
     .vol-display {
-      font-size: 56px;
+      font-size: 78px;
       font-weight: bold;
       line-height: 1;
       margin-bottom: 0.25rem;
     }
 
     .vol-label {
-      font-size: 12px;
+      font-size: 15px;
       margin-bottom: 2.5rem;
     }
 
     .slider-wrap {
       position: absolute;
-      width: 220px;
       z-index: 5;
     }
 
     .info-row {
-      font-size: 13px;
+      font-size: 18px;
       margin-bottom: 0.4rem;
       position: relative;
       z-index: 2;
     }
 
     .taunt {
-      font-size: 13px;
-      min-height: 18px;
+      font-size: 16px;
+      min-height: 20px;
       position: relative;
       z-index: 2;
     }
@@ -89,7 +88,7 @@
 
     .win-msg {
       position: absolute;
-      top: 50%;
+      top: 55%;
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
@@ -105,13 +104,13 @@
     .win-msg.show { opacity: 1; }
 
     .win-msg p {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: bold;
       margin: 0 0 4px;
     }
 
     .win-msg small {
-      font-size: 12px;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -124,7 +123,7 @@
   <div class="vol-display" id="volNum">50</div>
   <div class="vol-label">volume</div>
 
-  <div class="slider-wrap" id="sliderWrap" style="left: 160px; top: 220px;">
+  <div class="slider-wrap" id="sliderWrap" style="left: 160px; top: 220px; width: 220px;">
     <input type="range" id="slider" min="0" max="100" value="50" step="1" style="width:100%;">
   </div>
 
@@ -146,10 +145,14 @@
   const missCountEl = document.getElementById('missCount');
   const winMsg = document.getElementById('winMsg');
 
+  const INITIAL_WIDTH = 220;
+  const MIN_WIDTH = 50;
+
   let misses = 0;
   let dragging = false;
   let won = false;
   let lastFlee = 0;
+  let currentWidth = INITIAL_WIDTH;
 
   const messages = [
     "Try to grab the slider.",
@@ -169,20 +172,27 @@
     "You can do it.",
   ];
 
+  function updateSliderSize() {
+    currentWidth = Math.max(MIN_WIDTH, INITIAL_WIDTH - misses * 10);
+    wrap.style.width = currentWidth + 'px';
+    slider.style.width = '100%';
+  }
+
   function flee(cursorX, cursorY) {
     if (dragging || won) return;
     const now = Date.now();
-    if (now - lastFlee < 100) return;
+    if (now - lastFlee < 200) return;
     lastFlee = now;
 
     misses++;
     missCountEl.textContent = misses;
     tauntEl.textContent = messages[Math.min(misses, messages.length - 1)];
+    updateSliderSize();
 
     const appRect = app.getBoundingClientRect();
-    const wrapW = wrap.offsetWidth;
+    const wrapW = currentWidth;
     const wrapH = wrap.offsetHeight || 30;
-    const padding = 12;
+    const padding = 16;
 
     const maxX = appRect.width - wrapW - padding;
     const maxY = appRect.height - wrapH - padding;
@@ -197,15 +207,15 @@
     const dy = currentY + wrapH / 2 - relCY;
     const len = Math.sqrt(dx * dx + dy * dy) || 1;
 
-    const fleeStrength = Math.min(120 + misses * 10, 300);
+    const fleeStrength = Math.min(130 + misses * 8, 280);
     let newX = currentX + (dx / len) * fleeStrength;
     let newY = currentY + (dy / len) * fleeStrength;
 
     newX = Math.max(padding, Math.min(newX, maxX));
     newY = Math.max(padding, Math.min(newY, maxY));
 
-    const duration = Math.max(60, 200 - misses * 10);
-    wrap.style.transition = `left ${duration}ms ease-out, top ${duration}ms ease-out`;
+    const duration = Math.max(250, 500 - misses * 15);
+    wrap.style.transition = `left ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94), top ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
     wrap.style.left = newX + 'px';
     wrap.style.top = newY + 'px';
   }
@@ -216,7 +226,7 @@
     const cx = r.left + r.width / 2;
     const cy = r.top + r.height / 2;
     const dist = Math.sqrt((e.clientX - cx) ** 2 + (e.clientY - cy) ** 2);
-    if (dist < 50) flee(e.clientX, e.clientY);
+    if (dist < 65) flee(e.clientX, e.clientY);
   });
 
   slider.addEventListener('mouseenter', (e) => flee(e.clientX, e.clientY));
@@ -243,9 +253,12 @@
       winMsg.classList.remove('show');
       won = false;
       misses = 0;
+      currentWidth = INITIAL_WIDTH;
       missCountEl.textContent = 0;
       tauntEl.textContent = 'Try to grab the slider.';
       wrap.style.transition = 'none';
+      wrap.style.width = INITIAL_WIDTH + 'px';
+      slider.style.width = '100%';
       wrap.style.left = '160px';
       wrap.style.top = '220px';
     }, 3000);
