@@ -538,6 +538,12 @@ footer ul li a:hover { color: #fff; }
   border-bottom: 1px solid var(--color-border);
 }
 
+.project-section #cmz-redesign{
+  padding: var(--spacing-lg) 0;
+  width: 100%;
+  border-bottom: 1px solid var(--color-border);
+}
+
 .project-section:last-of-type {
   border-bottom: none;
 }
