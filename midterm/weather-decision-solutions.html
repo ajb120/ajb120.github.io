@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A product case study by Amelia Byerly: designing a historical snowstorm explorer and clarifying a weather forecasting experience.">
+  <title>Weather Decision Solutions — Amelia Byerly</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1><a href="home.html">Amelia Byerly</a></h1>
+      <nav aria-label="Primary navigation">
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="work.html">Work</a></li>
+          <li><a href="resume.html">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="project-hero">
+      <div class="container">
+        <a href="work.html" class="section-label case-back">← Back to Work</a>
+        <p class="case-eyebrow">Client product work / Summer 2026</p>
+        <h2>Making weather history easier to find and forecasts easier to scan.</h2>
+        <p class="project-intro">At Weather Decision Solutions, I worked directly with the CEO to design a historical-event discovery feature and reorganize the core forecasting experience around the questions clients ask most.</p>
+        <div class="project-meta-row">
+          <div class="project-meta-item"><label>Role</label><span>Project Management Intern</span></div>
+          <div class="project-meta-item"><label>Focus</label><span>Product design &amp; information architecture</span></div>
+          <div class="project-meta-item"><label>Team</label><span>CEO + product collaborators</span></div>
+          <div class="project-meta-item"><label>Scope</label><span>Two client-facing workflows</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-section weather-visual-section" aria-label="Historical Event Explorer concept diagram">
+      <div class="container">
+        <div class="weather-product-visual">
+          <div class="weather-toolbar"><span class="weather-brand">Historical Event Explorer</span><span class="weather-status">Client feature</span></div>
+          <div class="weather-workspace">
+            <aside class="weather-filters">
+              <span class="ui-label">Location</span><strong>Denver, Colorado</strong>
+              <span class="ui-label">Snowfall total</span><div class="range-track"><span></span></div>
+              <div class="range-values"><span>6 in</span><span>36+ in</span></div>
+              <span class="ui-label">Workflow</span>
+              <div class="filter-chip">Find</div><div class="filter-chip">Filter</div><div class="filter-chip">Save</div>
+            </aside>
+            <div class="weather-results">
+              <div class="result-heading"><span>Matching snowstorms</span><strong>Past events</strong></div>
+              <article class="storm-card"><div><span>Example result 01</span><strong>Historical snowstorm</strong></div><b>Matched</b></article>
+              <article class="storm-card"><div><span>Example result 02</span><strong>Historical snowstorm</strong></div><b>Matched</b></article>
+              <article class="storm-card"><div><span>Example result 03</span><strong>Historical snowstorm</strong></div><b>Saved</b></article>
+            </div>
+          </div>
+        </div>
+        <p class="project-caption">A simplified, non-confidential representation of the discovery workflow. Client interface details are intentionally omitted.</p>
+      </div>
+    </section>
+
+    <section class="project-section">
+      <div class="container">
+        <div class="case-split">
+          <div><p class="case-kicker">The challenge</p><h3 class="case-heading">Turn dense weather data into a useful client workflow.</h3></div>
+          <div class="case-copy">
+            <p>Clients needed a faster way to retrieve past snowstorms without manually working through an undifferentiated archive. At the same time, the main forecasting page carried several time horizons but did not create a clear path across current conditions, 7-day, 14-day, and monthly forecasts.</p>
+            <p>The design problem was not removing detail. It was deciding what should be visible first, what belonged behind a filter, and how clients could move from discovery to a saved result with confidence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-section">
+      <div class="container">
+        <div class="project-section-label"><span class="step-num">01</span><h3>Frame the jobs to be done</h3></div>
+        <p class="section-lede">I translated two broad product requests into specific user goals and a sequence the interface could support.</p>
+        <div class="decision-grid">
+          <article><span>01</span><h4>Find</h4><p>Start with a place or region rather than asking clients to interpret the full archive.</p></article>
+          <article><span>02</span><h4>Filter</h4><p>Narrow results by snowfall totals so the events shown match the operational question.</p></article>
+          <article><span>03</span><h4>Review</h4><p>Present comparable past events in a scannable results view.</p></article>
+          <article><span>04</span><h4>Save</h4><p>Let clients preserve a relevant storm for later analysis or reference.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-section">
+      <div class="container">
+        <div class="project-section-label"><span class="step-num">02</span><h3>Design the information hierarchy</h3></div>
+        <div class="case-split">
+          <div><h3 class="case-heading">One page, four forecast horizons.</h3></div>
+          <div class="case-copy">
+            <p>I redesigned the main forecasting page to create a clearer progression from what is happening now to what may happen next. Current conditions establish context; 7-day and 14-day forecasts support near-term planning; the monthly view provides the longer-range outlook.</p>
+            <p>The key decision was to make the time horizons feel related without flattening their different levels of detail. The structure preserves the information clients rely on while making the page easier to scan.</p>
+          </div>
+        </div>
+        <div class="forecast-flow" aria-label="Forecast hierarchy from current conditions to monthly outlook">
+          <div class="forecast-block active"><span>Now</span><strong>Current</strong><small>Immediate conditions</small></div><div class="forecast-arrow">→</div>
+          <div class="forecast-block"><span>Next</span><strong>7 day</strong><small>Near-term planning</small></div><div class="forecast-arrow">→</div>
+          <div class="forecast-block"><span>Plan</span><strong>14 day</strong><small>Extended outlook</small></div><div class="forecast-arrow">→</div>
+          <div class="forecast-block"><span>Look ahead</span><strong>Monthly</strong><small>Long-range context</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-section">
+      <div class="container">
+        <div class="project-section-label"><span class="step-num">03</span><h3>Work directly with leadership</h3></div>
+        <div class="project-copy-grid">
+          <div><h4>My contribution</h4><p>I worked directly with the CEO to move from product need to interface structure, balancing client utility with the amount of weather information the product needed to preserve. I contributed to both the design and build of the Historical Event Explorer and redesigned the main forecasting page.</p></div>
+          <div><h4>How I made decisions</h4><p>I used the client's intended tasks as the organizing principle: locate an event, constrain the results, understand what matched, and save it. For the forecast page, I used time horizon and urgency to determine order and emphasis.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-section">
+      <div class="container">
+        <div class="case-outcome"><p class="case-kicker">Outcome</p><h3>A clearer route from weather information to a client decision.</h3><p>The project produced a new way to find, filter, and save historical snowstorms and a more intentional flow across four forecast horizons. It also strengthened my ability to turn an open-ended business request into a structured product experience while collaborating closely with executive leadership.</p></div>
+        <p class="project-takeaway"><strong>What I would measure next:</strong> time to locate a relevant event, filter usage, saved-event completion, forecast-section engagement, and client confidence after completing each task.</p>
+      </div>
+    </section>
+
+    <div class="container"><nav class="project-nav" aria-label="Project navigation"><a href="work.html">← All Projects</a><a href="cmz-redesign.html">Next: Zoo Redesign →</a></nav></div>
+  </main>
+
+  <footer><div class="container"><h2>Get in touch</h2><ul><li><a href="mailto:ameliabyerly@gmail.com">Email</a></li><li><a href="https://www.linkedin.com/in/amelia-byerly" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://www.instagram.com/ameliabyerly/" target="_blank" rel="noopener">Instagram</a></li></ul></div></footer>
+</body>
+</html>
